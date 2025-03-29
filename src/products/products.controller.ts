@@ -6,12 +6,17 @@ import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { Auth, GetUser } from 'src/auth/decorators';
 import { ValidRoles } from 'src/auth/interfaces/valid-roles';
 import { User } from 'src/auth/entities/user.entity';
+import { ApiResponse } from '@nestjs/swagger';
+import { Product } from './entities';
 
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @ApiResponse({status: 201, description: 'Product was created.', type: Product})
+  @ApiResponse({status: 400, description: 'Bad Request.'})
+  @ApiResponse({status: 403, description: 'Forbidden, token related.'})
   @Post()
   @Auth( ValidRoles.admin )
   create(
